@@ -1,3 +1,14 @@
+# Objectives of this repo
+
+Hopefully we keep this up:
+
+- Have most of the current used PHP versions here.
+- Have it as Apache, CLI and FPM (e.g. for nginx).
+- It should be possible to SSH in each container.
+- Each container should be able ot send mails via relay.
+
+By that they are ready for your own dockerized hosting ;-)
+
 # Setup
 
 ## Docker
