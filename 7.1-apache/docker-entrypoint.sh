@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+umask 0002
 
 if [ "$USER" = "root" ]; then
 

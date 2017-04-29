@@ -2,20 +2,13 @@ FROM debian:wheezy
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl librecode0 libsqlite3-0 libxml2 autoconf file g++ gcc libc-dev make pkg-config re2c apache2 apache2-mpm-prefork --no-install-recommends && \
+    apt-get install -y ca-certificates curl libpcre3 librecode0 libsqlite3-0 libxml2 autoconf file g++ gcc libc-dev make pkg-config re2c --no-install-recommends && \
     rm -r /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
+RUN mkdir -p $PHP_INI_DIR/conf.d
 
-RUN mkdir -p $PHP_INI_DIR/conf.d && \
-    rm -rf /var/www/html && \
-    mkdir -p /var/lock/apache2 /var/run/apache2 /var/log/apache2 /var/www/html && \
-    chown -R www-data:www-data /var/lock/apache2 /var/run/apache2 /var/log/apache2 /var/www/html && \
-    mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.dist && \
-    rm /etc/apache2/sites-enabled/*
-
-ENV PHP_EXTRA_BUILD_DEPS apache2-prefork-dev
-ENV PHP_EXTRA_CONFIGURE_ARGS --with-apxs2=/usr/bin/apxs2
+ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data
 
 ENV GPG_KEYS 0A95E9A026542D53835E3F3A7DEC4E69FC9C83D7
 RUN set -xe \
@@ -66,6 +59,12 @@ RUN	cd /usr/src/php \
 
 COPY docker-php-ext-* /usr/local/bin/
 
+WORKDIR /var/www/html
+COPY php-fpm.conf /usr/local/etc/
+
+EXPOSE 9000
+CMD ["php-fpm"]
+
 RUN apt-get update && \
     apt-get install -y \
         libfreetype6-dev \
@@ -87,70 +86,48 @@ RUN apt-get update && \
         mysql-client \
         git \
         subversion \
-        wget \
-        --no-install-recommends && \
+        wget && \
     rm -rf /var/lib/apt/lists/* && \
     wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
     chmod a+rx /usr/local/bin/composer
 
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install ldap && \
     docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
-    docker-php-ext-install pdo_mysql && \
     docker-php-ext-configure mysql --with-mysql=mysqlnd && \
-    docker-php-ext-install mysql && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
-    docker-php-ext-install mysqli && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/lib && \
-    docker-php-ext-install gd && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-install mysql && \
+    docker-php-ext-install ldap && \
     docker-php-ext-install soap && \
     docker-php-ext-install intl && \
-    docker-php-ext-install mcrypt && \  
+    docker-php-ext-install mcrypt && \
+    docker-php-ext-install gd && \
     docker-php-ext-install gmp && \
     docker-php-ext-install bcmath && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install zip && \
     docker-php-ext-install pcntl && \
     docker-php-ext-install ftp && \
+    docker-php-ext-install sockets && \
     pecl install mongo && \
     pecl install memcached-1.0.2 && \
     pecl install redis
 
-ENV LOCALTIME Europe/Paris
+ENV LOCALTIME Europe/Berlin
+ENV PHPFPM__access.format '"%R - %u [%t] \"%m %r\" %s %l %Q %f"'
 
-ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
-ENV HTTPD__DocumentRoot /var/www/html
-ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'
-
-COPY apache2-foreground /usr/bin/apache2-foreground
-COPY apache2.conf /etc/apache2/apache2.conf
 
 RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
-    mkdir -p HTTPD_CONF_DIR /etc/apache2/conf-enabled/ && \
     echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
-    sed -i "s/DocumentRoot.*/DocumentRoot \${HTTPD__DocumentRoot}/"  /etc/apache2/apache2.conf && \
-    echo 'ServerName ${HOSTNAME}' > $HTTPD_CONF_DIR/00-default.conf && \
-    chmod a+w -R $HTTPD_CONF_DIR/ /etc/apache2/mods-enabled/ $PHP_INI_DIR/
+    echo "\ninclude=/usr/local/etc/php-fpm.d/*.conf" >> /usr/local/etc/php-fpm.conf && \
+    mkdir -p /usr/local/etc/php-fpm.d && \
+    chmod a+w -R $PHP_INI_DIR/conf.d/ /etc/ssmtp /usr/local/etc/php-fpm.d
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
 WORKDIR /var/www
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-EXPOSE 80
-
-
-### Special modifications for the www-data user.
-
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
-# Add www-data environment (for SSH mostly)
-RUN sed -i 's/\#umask 022/umask 002/' /etc/skel/.profile
-RUN usermod -d /home/www-data -s /bin/bash www-data \
-    && cp -av /etc/skel /home/www-data \
-    && mv /var/www /home/www-data/www \
-    && ln -s /home/www-data/www /var/www \
-    && chown -R www-data:www-data /home/www-data
-
-
+CMD ["php-fpm"]

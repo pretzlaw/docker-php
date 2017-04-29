@@ -116,7 +116,7 @@ RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     pecl install memcached-1.0.2 && \
     pecl install redis
 
-ENV LOCALTIME Europe/Paris
+ENV LOCALTIME Europe/Berlin
 
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
@@ -139,18 +139,3 @@ WORKDIR /var/www
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 80
-
-
-### Special modifications for the www-data user.
-
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
-# Add www-data environment (for SSH mostly)
-RUN sed -i 's/\#umask 022/umask 002/' /etc/skel/.profile
-RUN usermod -d /home/www-data -s /bin/bash www-data \
-    && cp -av /etc/skel /home/www-data \
-    && mv /var/www /home/www-data/www \
-    && ln -s /home/www-data/www /var/www \
-    && chown -R www-data:www-data /home/www-data
-
-

@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:7.1-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 RUN apt-get update && \
@@ -11,6 +11,7 @@ RUN apt-get update && \
         libxml2-dev \
         zlib1g-dev \
         libncurses5-dev \
+        libldb-dev \
         libldap2-dev \
         libicu-dev \
         libmemcached-dev \
@@ -29,20 +30,20 @@ RUN apt-get update && \
     chmod a+rx /usr/local/bin/composer
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
-    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu && \
-    docker-php-ext-install ldap && \
+    ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so && \
+    ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so && \
+    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-configure mysql --with-mysql=mysqlnd && \
-    docker-php-ext-install mysql && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/lib && \
+    docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_sqlite && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/lib && \
-    docker-php-ext-install gd && \
+    docker-php-ext-install ldap && \
     docker-php-ext-install soap && \
     docker-php-ext-install intl && \
     docker-php-ext-install mcrypt && \
+    docker-php-ext-install gd && \
     docker-php-ext-install gmp && \
     docker-php-ext-install bcmath && \
     docker-php-ext-install mbstring && \
@@ -50,8 +51,8 @@ RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     docker-php-ext-install pcntl && \
     docker-php-ext-install ftp && \
     docker-php-ext-install sockets && \
-    pecl install mongo && \
-    pecl install memcached-2.2.0 && \
+    pecl install mongodb && \
+    pecl install memcached && \
     pecl install redis && \
     pecl install xdebug
 
@@ -63,7 +64,7 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
-ENV LOCALTIME Europe/Paris
+ENV LOCALTIME Europe/Berlin
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
 ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'
@@ -79,21 +80,8 @@ RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
+RUN groupadd -go 999 docker && usermod -a -G docker www-data
+
 WORKDIR /var/www
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-
-### Special modifications for the www-data user.
-
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
-# Add www-data environment (for SSH mostly)
-RUN sed -i 's/\#umask 022/umask 002/' /etc/skel/.profile
-RUN usermod -d /home/www-data -s /bin/bash www-data \
-    && cp -av /etc/skel /home/www-data \
-    && mv /var/www /home/www-data/www \
-    && ln -s /home/www-data/www /var/www \
-    && chown -R www-data:www-data /home/www-data
-
-

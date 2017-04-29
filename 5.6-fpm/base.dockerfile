@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:5.6-fpm
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 RUN apt-get update && \
@@ -51,9 +51,9 @@ RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     docker-php-ext-install ftp && \
     docker-php-ext-install sockets && \
     pecl install mongo && \
-    pecl install memcached-2.2.0 && \
     pecl install redis && \
-    pecl install xdebug
+    pecl install xdebug && \
+    pecl install memcached-2.2.0
 
 ADD http://www.zlib.net/zlib-1.2.11.tar.gz /tmp/zlib.tar.gz
 RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
@@ -63,37 +63,19 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
-ENV LOCALTIME Europe/Paris
-ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
-ENV HTTPD__DocumentRoot /var/www/html
-ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'
+ENV LOCALTIME Europe/Berlin
+ENV PHPFPM__access.format '"%R - %u [%t] \"%m %r\" %s %l %Q %f"'
 
 RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
     echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
-    sed -i "s/DocumentRoot.*/DocumentRoot \${HTTPD__DocumentRoot}/"  /etc/apache2/apache2.conf && \
-    echo 'ServerName ${HOSTNAME}' > $HTTPD_CONF_DIR/00-default.conf && \
-    echo 'ServerSignature Off' > /etc/apache2/conf-enabled/z-security.conf && \
-    echo 'ServerTokens Minimal' >> /etc/apache2/conf-enabled/z-security.conf && \
-    chmod a+w -R $HTTPD_CONF_DIR/ /etc/apache2/mods-enabled $PHP_INI_DIR/ && \
-    rm /etc/apache2/sites-enabled/000-default.conf
+    echo "\ninclude=/usr/local/etc/php-fpm.d/*.conf" >> /usr/local/etc/php-fpm.conf && \
+    mkdir -p /usr/local/etc/php-fpm.d && \
+    chmod a+w -R $PHP_INI_DIR/conf.d/ /etc/ssmtp /usr/local/etc/php-fpm.d/
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
 WORKDIR /var/www
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-
-### Special modifications for the www-data user.
-
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
-# Add www-data environment (for SSH mostly)
-RUN sed -i 's/\#umask 022/umask 002/' /etc/skel/.profile
-RUN usermod -d /home/www-data -s /bin/bash www-data \
-    && cp -av /etc/skel /home/www-data \
-    && mv /var/www /home/www-data/www \
-    && ln -s /home/www-data/www /var/www \
-    && chown -R www-data:www-data /home/www-data
-
+CMD ["php-fpm"]
 

@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:5.4-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 RUN apt-get update && \
@@ -16,7 +16,6 @@ RUN apt-get update && \
         libmemcached-dev \
         libcurl4-openssl-dev \
         libssl-dev \
-        libsqlite3-dev \
         php-pear \
         curl \
         ssmtp \
@@ -37,7 +36,6 @@ RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     docker-php-ext-install mysql && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
     docker-php-ext-install mysqli && \
-    docker-php-ext-install pdo_sqlite && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/lib && \
     docker-php-ext-install gd && \
     docker-php-ext-install soap && \
@@ -53,17 +51,10 @@ RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     pecl install mongo && \
     pecl install memcached-2.2.0 && \
     pecl install redis && \
-    pecl install xdebug
+    pecl install xdebug-2.4.1
 
-ADD http://www.zlib.net/zlib-1.2.11.tar.gz /tmp/zlib.tar.gz
-RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
-    cd /tmp/zlib-1.2.11 && \
-    ./configure --prefix=/usr/local/zlib && \
-    make && make install && \
-    rm -Rf /tmp/zlib-1.2.11 && \
-    rm /tmp/zlib.tar.gz
+ENV LOCALTIME Europe/Berlin
 
-ENV LOCALTIME Europe/Paris
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
 ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'
@@ -72,28 +63,10 @@ RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
     echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
     sed -i "s/DocumentRoot.*/DocumentRoot \${HTTPD__DocumentRoot}/"  /etc/apache2/apache2.conf && \
     echo 'ServerName ${HOSTNAME}' > $HTTPD_CONF_DIR/00-default.conf && \
-    echo 'ServerSignature Off' > /etc/apache2/conf-enabled/z-security.conf && \
-    echo 'ServerTokens Minimal' >> /etc/apache2/conf-enabled/z-security.conf && \
-    chmod a+w -R $HTTPD_CONF_DIR/ /etc/apache2/mods-enabled $PHP_INI_DIR/ && \
-    rm /etc/apache2/sites-enabled/000-default.conf
+    chmod a+w -R $HTTPD_CONF_DIR/ /etc/apache2/mods-enabled/ $PHP_INI_DIR/
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
 WORKDIR /var/www
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-
-### Special modifications for the www-data user.
-
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
-# Add www-data environment (for SSH mostly)
-RUN sed -i 's/\#umask 022/umask 002/' /etc/skel/.profile
-RUN usermod -d /home/www-data -s /bin/bash www-data \
-    && cp -av /etc/skel /home/www-data \
-    && mv /var/www /home/www-data/www \
-    && ln -s /home/www-data/www /var/www \
-    && chown -R www-data:www-data /home/www-data
-
-
