@@ -4,6 +4,7 @@ MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
+        make build-essential autoconf libicu-dev \
         git \
         wget
 
@@ -12,24 +13,24 @@ RUN apt-get update && \
 #
 
 # Bison parser
-RUN wget https://ftp.gnu.org/gnu/bison/bison-2.4.1.tar.gz && \
-    tar xzf bison-2.4.1.tar.gz && \
-    cd bison-2.4.1 && \
+RUN wget https://ftp.gnu.org/gnu/bison/bison-2.7.1.tar.gz && \
+    tar xzf bison-2.7.1.tar.gz && \
+    cd bison-2.7.1 && \
     ./configure && \
     make -j "$(nproc)" && \
     make install && \
     cd .. && \
-    rm -rf bison-2.4.1 bison-2.4.1.tar.gz
+    rm -rf bison-2.7.1*
 
 # XML
-RUN wget ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz && \
-    tar xzf libxml2-2.8.0.tar.gz && \
-    cd libxml2-2.8.0 && \
+RUN wget ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz && \
+    tar xzf libxml2-2.9.4.tar.gz && \
+    cd libxml2-2.9.4 && \
     ./configure && \
     make -j "$(nproc)" && \
     make install && \
     cd .. && \
-    rm -rf libxml2-2.8.0 libxml2-2.8.0.tar.gz
+    rm -rf libxml2-2.9.4*
 
 # Compile PHP 6.0
 RUN git clone -b experimental/first_unicode_implementation https://github.com/php/php-src.git && \
@@ -44,6 +45,8 @@ RUN git clone -b experimental/first_unicode_implementation https://github.com/ph
 #
 # Apache2
 #
+
+RUN apt-get install -y --no-install-recommends apache2-bin apache2.2-common apache2-dev
 
 # Allow override of variables
 RUN sed -ri 's/^export ([^=]+)=(.*)$/: ${\1:=\2}\nexport \1/' "/etc/apache2/envvars" && \
