@@ -13,14 +13,17 @@ RUN apt-get update && \
 #
 
 # Bison parser
-RUN wget https://ftp.gnu.org/gnu/bison/bison-2.7.1.tar.gz && \
-    tar xzf bison-2.7.1.tar.gz && \
-    cd bison-2.7.1 && \
+# ./configure checks for the bison version
+# bison versions supported for regeneration of the Zend/PHP parsers:
+# 1.28 1.35 1.75 1.875 2.0 2.1 2.2 2.3 2.4 2.4.1
+RUN wget https://ftp.gnu.org/gnu/bison/bison-2.4.1.tar.gz && \
+    tar xzf bison-2.4.1.tar.gz && \
+    cd bison-2.4.1 && \
     ./configure && \
     make -j "$(nproc)" && \
     make install && \
     cd .. && \
-    rm -rf bison-2.7.1*
+    rm -rf bison-2.4.1*
 
 # XML
 RUN wget ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz && \
