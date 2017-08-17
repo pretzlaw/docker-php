@@ -1,3 +1,6 @@
+The repo https://hub.docker.com/r/pretzlaw/php/
+holds the compiled container of https://github.com/pretzlaw/docker-php .
+
 # Objectives of this repo
 
 Hopefully we keep this up:
