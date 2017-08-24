@@ -80,8 +80,6 @@ RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
-RUN groupadd -og 999 docker && usermod -a -G docker www-data
-
 WORKDIR /var/www
 
 ENTRYPOINT ["/entrypoint.sh"]
