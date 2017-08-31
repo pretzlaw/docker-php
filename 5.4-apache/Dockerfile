@@ -1,7 +1,7 @@
-FROM pretzlaw/php:5.4-cli
+FROM php:5.4-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
-RUN apt-get update
+# See https://github.com/docker-library/php/tree/fec7f537f049aafd2102202519c3ca9cb9576707/5.4
 
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
