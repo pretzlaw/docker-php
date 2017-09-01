@@ -77,8 +77,8 @@ fi
 #
 # Run
 
-if [[ ! -z "$1" ]]; then
-    exec "${*}"
-else
+if [[ $# -eq 0 ]]; then
     exec apache2-foreground
+else
+    exec "${*}"
 fi
