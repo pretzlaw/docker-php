@@ -80,5 +80,5 @@ fi
 if [[ $# -eq 0 ]]; then
     exec apache2-foreground
 else
-    exec "${*}"
+    exec "$@"
 fi
