@@ -66,8 +66,7 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm /tmp/zlib.tar.gz
 
 
-RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
-    echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
+RUN echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
     chmod a+w -R $PHP_INI_DIR/conf.d/ /etc/ssmtp
 
 COPY docker-entrypoint.sh /entrypoint.sh

@@ -125,8 +125,7 @@ ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}
 COPY apache2-foreground /usr/bin/apache2-foreground
 COPY apache2.conf /etc/apache2/apache2.conf
 
-RUN rm $PHP_INI_DIR/conf.d/docker-php-ext* && \
-    mkdir -p HTTPD_CONF_DIR /etc/apache2/conf-enabled/ && \
+RUN mkdir -p HTTPD_CONF_DIR /etc/apache2/conf-enabled/ && \
     echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
     sed -i "s/DocumentRoot.*/DocumentRoot \${HTTPD__DocumentRoot}/"  /etc/apache2/apache2.conf && \
     echo 'ServerName ${HOSTNAME}' > $HTTPD_CONF_DIR/00-default.conf && \
