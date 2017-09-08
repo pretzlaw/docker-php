@@ -34,8 +34,11 @@ for tag in ${buildOrder[*]}; do
     docker build -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
 
     if [[ "0" != "$?" ]]; then
+        cp ${baseDir}/log/php_${tag}.log ./php_${tag}.err
         continue;
     fi
 
     docker push ${imageName}
 done
+
+ls *.err
