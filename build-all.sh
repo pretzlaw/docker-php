@@ -31,7 +31,7 @@ fi
 for tag in ${buildOrder[*]}; do
     cd ${baseDir}/${tag}
     imageName=pretzlaw/php:${tag}
-    docker build -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
+    docker build --no-cache -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
 
     if [[ "0" != "$?" ]]; then
         cp ${baseDir}/log/php_${tag}.log ./php_${tag}.err
