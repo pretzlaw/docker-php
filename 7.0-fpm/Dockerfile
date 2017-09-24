@@ -1,8 +1,8 @@
 FROM php:7.0-fpm
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \

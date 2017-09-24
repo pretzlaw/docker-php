@@ -1,8 +1,8 @@
 FROM debian:wheezy
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
-RUN apt-get update && \
-    apt-get install -y ca-certificates curl libpcre3 librecode0 libsqlite3-0 libxml2 autoconf file g++ gcc libc-dev make pkg-config re2c --no-install-recommends && \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y ca-certificates curl libpcre3 librecode0 libsqlite3-0 libxml2 autoconf file g++ gcc libc-dev make pkg-config re2c --no-install-recommends && \
     rm -r /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
