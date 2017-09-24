@@ -9,16 +9,14 @@ if [[ ! -d ${baseDir}/log ]]; then
 fi
 
 for tag in ${buildOrder[*]}; do
-    logFile="${baseDir}/log/php_${tag}.log"
-    rm ${logFile}
-
     cd ${baseDir}/${tag}
     imageName=pretzlaw/php:${tag}
-    docker build --no-cache -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
+    logFile="${baseDir}/log/php_${tag}.log"
 
-#    if [[ "0" != "$PIPESTATUS[0]" ]]; then
-#        mv ${logFile} ./php_${tag}.err
-#    fi
+    if [[ ! -f $logFile ]]; then
+        # We do not push failed/incomplete container.
+        continue;
+    fi
+
+    docker push ${imageName}
 done
-
-ls *.err
