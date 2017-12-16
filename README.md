@@ -36,27 +36,42 @@ Simple as that:
 
 Exchange the image name by one of the following tags.
 
+### Complete example
+
+Here is a more complete example what you might want to do in your projects:
+
+    version: '3'
+    services:
+        php:
+            image: pretzlaw/php:7.2-cli
+            
+            environments:
+                LOCALTIME: Europe/Paris
+                pecl_install: xdebug
+                PHP_php5enmod: bcmath gd intl mcrypt mbstring mysqli pdo_mysql pdo_sqlite zip 
+
 # Supported tags and respective Dockerfile links
 
 Use one of these:
 
-- `php:5.3-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-apache)
-- `php:5.3-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-fpm)
-- `php:5.4-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.4-apache)
-- `php:5.4-cli` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.4-cli)
-- `php:5.4-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-fpm)
-- `php:5.5-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-apache)
-- `php:5.5-cli` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-cli)
-- `php:5.5-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-fpm)
-- `php:5.6-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-apache)
-- `php:5.6-cli` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-cli)
-- `php:5.6-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-fpm)
-- `php:7.0-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-apache)
-- `php:7.0-cli` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-cli)
-- `php:7.0-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-fpm)
-- `php:7.1-apache` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-apache)
-- `php:7.1-cli` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-cli)
-- `php:7.1-fpm` [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-fpm)
+- `php:5.3-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-apache)
+- `php:5.3-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-fpm)
+- `php:5.4-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.4-apache)
+- `php:5.4-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.4-cli)
+- `php:5.4-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.3-fpm)
+- `php:5.5-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-apache)
+- `php:5.5-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-cli)
+- `php:5.5-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.5-fpm)
+- `php:5.6-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-apache)
+- `php:5.6-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-cli)
+- `php:5.6-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/5.6-fpm)
+- `php:7.0-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-apache)
+- `php:7.0-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-cli)
+- `php:7.0-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.0-fpm)
+- `php:7.1-apache`  [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.1-apache)
+- `php:7.1-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.1-cli)
+- `php:7.1-fpm`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.1-fpm)
+- `php:7.2-cli`     [Dockerfile](https://github.com/pretzlaw/docker-php/tree/master/7.2-fpm)
 
 
 # Meta
