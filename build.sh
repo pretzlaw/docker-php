@@ -4,6 +4,10 @@ baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ${baseDir}/.env
 
+function __docker_recipe() {
+    ${baseDir}/../docker-recipe/docker-recipe "${@}"
+}
+
 if [[ ! -d ${baseDir}/log ]]; then
     mkdir ${baseDir}/log
 fi
@@ -19,6 +23,9 @@ for tag in ${buildOrder[*]}; do
     :>$logFile
 
     cd ${baseDir}/${tag}
+
+    [[ -f Dockerfile.recipe ]] && __docker_recipe
+
     imageName=pretzlaw/php:${tag}
     docker build --no-cache -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
     echo ""

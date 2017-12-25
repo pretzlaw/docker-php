@@ -1,33 +1,30 @@
 FROM php:7.0-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN apt-get update &&
+    apt-get upgrade
+
+
+RUN apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng12-dev \
         libgmp-dev \
         libxml2-dev \
-        zlib1g-dev \
         libncurses5-dev \
         libldb-dev \
         libldap2-dev \
-        libicu-dev \
         libmemcached-dev \
         libcurl4-openssl-dev \
         libssl-dev \
         libsqlite3-dev \
         php-pear \
-        curl \
         ssmtp \
         mysql-client \
-        git \
-        subversion \
-        wget && \
-    rm -rf /var/lib/apt/lists/* && \
-    wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
-    chmod a+rx /usr/local/bin/composer
+        wget
+
+# @docker-recipe vcs php/curl php/intl php/mcrypt php/zip php/gd
+
+# @docker-recipe php/composer
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so && \
@@ -41,13 +38,9 @@ RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     docker-php-ext-install pdo_sqlite && \
     docker-php-ext-install ldap && \
     docker-php-ext-install soap && \
-    docker-php-ext-install intl && \
-    docker-php-ext-install mcrypt && \
-    docker-php-ext-install gd && \
     docker-php-ext-install gmp && \
     docker-php-ext-install bcmath && \
     docker-php-ext-install mbstring && \
-    docker-php-ext-install zip && \
     docker-php-ext-install pcntl && \
     docker-php-ext-install ftp && \
     docker-php-ext-install sockets && \
@@ -64,7 +57,6 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
-ENV LOCALTIME Europe/Paris
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
 ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'

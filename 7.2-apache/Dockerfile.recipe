@@ -1,4 +1,4 @@
-FROM ${IMAGE}
+FROM php:7.2-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 WORKDIR /var/www
@@ -8,8 +8,14 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # update
 RUN apt-get update \
-    && apt-get install -qqy man \
     && apt-get upgrade -qy
 
 # basics
 RUN apt-get install -qqy curl unzip vim wget
+
+# @docker-recipe vcs
+
+# @docker-recipe php/composer
+
+# cleanup
+RUN rm -rf /var/lib/apt/lists/*
