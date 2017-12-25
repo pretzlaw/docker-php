@@ -5,7 +5,7 @@ baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ${baseDir}/.env
 
 function __docker_recipe() {
-    ${baseDir}/../docker-recipe/docker-recipe "${@}"
+    ${baseDir}/../docker-recipes/docker-recipe "${@}"
 }
 
 if [[ ! -d ${baseDir}/log ]]; then
