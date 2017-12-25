@@ -12,8 +12,6 @@ if [[ ! -d ${baseDir}/log ]]; then
     mkdir ${baseDir}/log
 fi
 
-source scaffold.sh
-
 if [[ ! -z "$1" ]]; then
     buildOrder=($1)
 fi
