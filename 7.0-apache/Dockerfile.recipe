@@ -1,7 +1,7 @@
 FROM php:7.0-apache
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
-RUN apt-get update &&
+RUN apt-get update && \
     apt-get upgrade
 
 
