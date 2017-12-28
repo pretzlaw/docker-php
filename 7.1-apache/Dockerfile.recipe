@@ -25,9 +25,9 @@ RUN apt-get update && \
         git \
         subversion \
         wget && \
-    rm -rf /var/lib/apt/lists/* && \
-    wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
-    chmod a+rx /usr/local/bin/composer
+    rm -rf /var/lib/apt/lists/*
+
+# @docker-recipe php/composer
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
     ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so && \
@@ -64,7 +64,6 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
-ENV LOCALTIME Europe/Paris
 ENV HTTPD_CONF_DIR /etc/apache2/conf-enabled/
 ENV HTTPD__DocumentRoot /var/www/html
 ENV HTTPD__LogFormat '"%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" common'

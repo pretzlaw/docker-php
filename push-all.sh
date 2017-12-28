@@ -13,6 +13,10 @@ for tag in ${buildOrder[*]}; do
     imageName=pretzlaw/php:${tag}
     logFile="${baseDir}/log/php_${tag}.log"
 
+    if [[ -x $tag/tests.sh ]]; then
+        $tag/tests.sh || continue;
+    fi
+
     if [[ ! -f $logFile ]]; then
         # We do not push failed/incomplete container.
         continue;
