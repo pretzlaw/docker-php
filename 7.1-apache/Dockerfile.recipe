@@ -5,7 +5,6 @@ RUN apt-get update && \
     apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libgmp-dev \
         libncurses5-dev \
         libmemcached-dev \
         libssl-dev \
@@ -23,20 +22,19 @@ RUN apt-get update && \
 # @docker-recipe php/intl
 # @docker-recipe php/ldap
 # @docker-recipe php/gd
+# @docker-recipe php/gmp
 # @docker-recipe php/mcrypt
 # @docker-recipe php/soap
 # @docker-recipe php/xml
 # @docker-recipe php/zip
 
 # TODO maybe special, need review
-RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h && \
-    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_sqlite && \
-    docker-php-ext-install gmp && \
     docker-php-ext-install pcntl && \
     docker-php-ext-install ftp && \
     docker-php-ext-install sockets && \
