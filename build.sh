@@ -17,7 +17,7 @@ if [[ ! -z "$1" ]]; then
 fi
 
 for tag in ${buildOrder[*]}; do
-    logFile="${baseDir}/log/php_${tag}.log"
+    logFile="${baseDir}/log/${tag}.log"
     :>$logFile
 
     cd ${baseDir}/${tag}
