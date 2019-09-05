@@ -1,4 +1,4 @@
 [submodule "lib/docker-recipes"]
 	path = lib/docker-recipes
-	url = git@github.com:pretzlaw/docker-recipes.git
+	url = https://github.com/pretzlaw/docker-recipes.git
 	branch = master
