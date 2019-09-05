@@ -2,28 +2,28 @@ language: bash
 
 env:
   matrix:
-    - TAG=5.3-apache
-    - TAG=5.3-cli
-    - TAG=5.3-fpm
-    - TAG=5.4-apache
-    - TAG=5.4-cli
-    - TAG=5.4-fpm
-    - TAG=5.5-apache
-    - TAG=5.5-cli
-    - TAG=5.5-fpm
-    - TAG=5.6-apache
-    - TAG=5.6-cli
-    - TAG=5.6-fpm
-    - TAG=6.0-apache
-    - TAG=6.0-cli
+#    - TAG=5.3-apache
+#    - TAG=5.3-cli
+#    - TAG=5.3-fpm
+#    - TAG=5.4-apache
+#    - TAG=5.4-cli
+#    - TAG=5.4-fpm
+#    - TAG=5.5-apache
+#    - TAG=5.5-cli
+#    - TAG=5.5-fpm
+#    - TAG=5.6-apache
+#    - TAG=5.6-cli
+#    - TAG=5.6-fpm
+#    - TAG=6.0-apache
+#    - TAG=6.0-cli
     - TAG=7.0-apache
     - TAG=7.0-cli
     - TAG=7.0-fpm
     - TAG=7.1-apache
     - TAG=7.1-cli
     - TAG=7.1-fpm
-    - TAG=7.2-apache
-    - TAG=7.2-cli
+#    - TAG=7.2-apache
+#    - TAG=7.2-cli
 
 before_script:
   - git submodule update --init
