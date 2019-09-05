@@ -1,5 +1,4 @@
 .idea/
-docker-recipes
 
 # Those are generated
 /7.1-apache/Dockerfile

@@ -26,6 +26,7 @@ env:
     - TAG=7.2-cli
 
 before_script:
+  - git submodule update --init
   - ./build.sh $TAG
 
 script:
@@ -35,4 +36,4 @@ script:
   - export RUN_COUNT="$(docker ps -q | wc -l)"
   - docker restart $(docker ps -q)
   - docker ps -a
-  - [[ "$RUN_COUNT" == "$(docker ps -q | wc -l)" ]]
+  - "[[ \"$RUN_COUNT\" == \"$(docker ps -q | wc -l)\" ]]"
