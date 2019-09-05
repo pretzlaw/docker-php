@@ -16,9 +16,9 @@ env:
 #    - TAG=5.6-fpm
 #    - TAG=6.0-apache
 #    - TAG=6.0-cli
-    - TAG=7.0-apache
-    - TAG=7.0-cli
-    - TAG=7.0-fpm
+#    - TAG=7.0-apache
+#    - TAG=7.0-cli
+#    - TAG=7.0-fpm
     - TAG=7.1-apache
     - TAG=7.1-cli
     - TAG=7.1-fpm

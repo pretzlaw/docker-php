@@ -20,8 +20,7 @@ RUN apt-get update && \
         libsqlite3-dev \
         php-pear \
         curl \
-        ssmtp \
-        mysql-client \
+        default-mysql-client \
         git \
         subversion \
         wget && \
