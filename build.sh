@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ${baseDir}/.env
@@ -25,7 +27,7 @@ for tag in ${buildOrder[*]}; do
     [[ -f Dockerfile.recipe ]] && __docker_recipe
 
     imageName=pretzlaw/php:${tag}
-    docker build --no-cache -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
+    docker build -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
     echo ""
 done
 
