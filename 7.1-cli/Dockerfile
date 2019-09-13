@@ -1,5 +1,5 @@
 FROM php:7.1-cli
-MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
+MAINTAINER rmp-up <mail@rmp-up.de>
 
 RUN apt-get update && \
     apt-get install -y \
@@ -18,13 +18,9 @@ RUN apt-get update && \
         libcurl4-openssl-dev \
         libssl-dev \
         libsqlite3-dev \
-        php-pear \
         curl \
         default-mysql-client \
-        git \
-        subversion \
         wget && \
-    rm -rf /var/lib/apt/lists/* && \
     wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
     chmod a+rx /usr/local/bin/composer
 
@@ -65,9 +61,6 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
 
 ENV LOCALTIME Europe/Paris
 
-RUN echo 'sendmail_path = /usr/sbin/ssmtp -t' >> $PHP_INI_DIR/conf.d/00-default.ini && \
-    chmod a+w -R $PHP_INI_DIR/conf.d/ /etc/ssmtp
-
 COPY docker-entrypoint.sh /entrypoint.sh
 
 WORKDIR /var/www
@@ -75,7 +68,7 @@ WORKDIR /var/www
 ENTRYPOINT ["/entrypoint.sh"]
 
 
-### Special modifications for the www-data user.
+# Special modifications for the www-data user.
 
 RUN groupadd -og 999 docker && usermod -a -G docker www-data
 
@@ -88,3 +81,4 @@ RUN usermod -d /home/www-data -s /bin/bash www-data \
     && chown -R www-data:www-data /home/www-data
 
 
+RUN rm -rf /var/lib/apt/lists/*
