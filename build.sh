@@ -30,5 +30,3 @@ for tag in ${buildOrder[*]}; do
     docker build -t ${imageName} . 2>&1 | tee ${baseDir}/log/php_${tag}.log
     echo ""
 done
-
-ls *.err 2>/dev/null
