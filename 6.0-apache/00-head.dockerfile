@@ -1,5 +1,5 @@
 FROM pretzlaw/php:6.0-cli
-MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
+MAINTAINER Pretzlaw <mail@rmp-up.de>
 WORKDIR /var/www/html
 
 # Allow override of variables
@@ -42,7 +42,7 @@ RUN { \
     } | tee "/etc/apache2/conf-available/docker-php.conf" && \
     a2enconf docker-php
 
-COPY apache2-foreground.sh /usr/local/bin/apache2-foreground
+COPY 6.0-apache/apache-foreground.sh /usr/local/bin/apache2-foreground
 
 EXPOSE 80
 CMD ["apache2-foreground"]

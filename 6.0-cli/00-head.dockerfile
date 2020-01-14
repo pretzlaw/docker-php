@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
+MAINTAINER Pretzlaw <mail@rmp-up.de>
 WORKDIR /var/www/html
 
 RUN apt-get update && \
