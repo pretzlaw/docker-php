@@ -2,9 +2,5 @@
 docker-recipes
 
 # Those are generated
-/7.1-apache/Dockerfile
-/7.2-cli/Dockerfile
-/7.2-cli/entrypoint.sh
-/7.2-apache/Dockerfile
-/7.2-apache/entrypoint.sh
+*/Dockerfile
 /log

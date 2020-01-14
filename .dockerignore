@@ -1,0 +1,7 @@
+# Ignore files that are irrelevant for other versions.
+# So that a slight change in one version
+# does not invalidate the cache of another version.
+*/*.dockerfile
+*/*-test.sh
+build.sh
+README.md
