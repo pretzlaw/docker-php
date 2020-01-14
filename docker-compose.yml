@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  php:
+    image: pretzlaw/php:6.0-apache
+    volumes:
+      - ".:/var/www/html"
+    ports:
+    - 8000:80
+    environment:
+      LOCALTIME: Europe/Paris
+
+      # Apache configuration (HTTPD__ prefix)
+      HTTPD__DocumentRoot: /var/www/html
+
+      # Install via PECL
+      pecl_install: redis
+
+      # PHP config (PHP__ prefix)
+      PHP__memory_limit: 512M
+      PHP__session.save_path: /var/www/html
+
+      # Enable modules
+      PHP_php5enmod: >
+        gd
+        intl
+        mysqli
+        xdebug
