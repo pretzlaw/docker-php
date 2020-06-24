@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian
 MAINTAINER Mike Pretzlaw <mail@mike-pretzlaw.de>
 
 RUN apt-get update && \

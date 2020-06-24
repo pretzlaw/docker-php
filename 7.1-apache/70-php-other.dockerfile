@@ -1,1 +1,1 @@
-RUN docker-php-ext-install sockets
+../7.0-apache/70-php-other.dockerfile

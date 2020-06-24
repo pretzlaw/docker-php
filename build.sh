@@ -9,6 +9,7 @@ if [[ ! -d ${baseDir}/log ]]; then
 fi
 
 if [[ ! -z "$1" ]]; then
+    # Specific build requested, so only this will be used
     buildOrder=($1)
 fi
 
@@ -26,7 +27,7 @@ for configDir in ${buildOrder[*]}; do
 
     imageName=pretzlaw/php:${tag}
     echo $imageName
-    docker build -t "${imageName}" -f "$configDir"/Dockerfile . | tee ${baseDir}/log/php_${tag}.log
+    docker build --no-cache --pull -t "${imageName}" -f "$configDir"/Dockerfile . | tee ${baseDir}/log/php_${tag}.log
     echo ""
 
     rm "$configDir"/Dockerfile

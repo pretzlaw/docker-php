@@ -1,1 +1,1 @@
-RUN apt-get update && apt-get upgrade -y
+../7.0-apache/10-prepare.dockerfile

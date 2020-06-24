@@ -1,1 +1,1 @@
-RUN rm -rf /var/lib/apt/lists/*
+../7.0-apache/99-clean.dockerfile

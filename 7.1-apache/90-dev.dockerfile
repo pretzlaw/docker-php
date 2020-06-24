@@ -1,6 +1,1 @@
-# Dev
-RUN apt install -y \
-    git \
-    subversion
-
-RUN pecl install xdebug
+../7.0-apache/90-dev.dockerfile

@@ -8,6 +8,7 @@ Hopefully we keep this up:
 - Have most of the current used PHP versions here.
 - Have it as Apache, CLI and FPM (e.g. for nginx).
 - It should be possible to SSH in each container.
+- Mostly inherited Dockerfile configuration (via symlinks)
 
 Ready and set for your own dockerized development workflow ;-)
 
