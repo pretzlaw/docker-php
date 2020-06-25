@@ -1,0 +1,1 @@
+RUN pecl install xdebug

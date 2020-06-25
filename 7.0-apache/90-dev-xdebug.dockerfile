@@ -1,0 +1,1 @@
+RUN pecl install xdebug-2.9.0
