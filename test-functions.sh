@@ -34,3 +34,7 @@ function __php-module() {
     __docker_test "php -m | grep $module"
   done
 }
+
+function __can-exec() {
+  __docker_test "$@";
+}

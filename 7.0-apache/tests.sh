@@ -15,3 +15,6 @@ __php-module gd
 
 # 70-php-other.dockerfile
 __php-module sockets
+
+# 80-composer.dockerfile
+__can-exec composer
